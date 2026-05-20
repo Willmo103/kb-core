@@ -11,6 +11,12 @@ from PIL.TiffImagePlugin import TiffImageFile
 
 from skip_dirs import SKIP_DIRS
 from skip_exts import SKIP_EXTENSIONS
+from target_exts import TARGET_EXTENSIONS
+
+
+def is_embeddable_file(file_path: Path) -> bool:
+    """Check if the file has an embeddable extension."""
+    return file_path.suffix in TARGET_EXTENSIONS
 
 
 def human_size(bytes_: int) -> str:
