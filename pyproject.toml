@@ -1,0 +1,16 @@
+[project]
+name = "kb-core"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "WIll Morris", email = "88165849+Willmo103@users.noreply.github.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "pillow>=12.2.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.0,<0.9"]
+build-backend = "uv_build"
