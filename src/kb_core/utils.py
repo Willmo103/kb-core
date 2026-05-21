@@ -9,9 +9,9 @@ from PIL import ExifTags, Image
 from PIL.TiffImagePlugin import TiffImageFile
 
 
-from skip_dirs import SKIP_DIRS
-from skip_exts import SKIP_EXTENSIONS
-from target_exts import TARGET_EXTENSIONS
+from .skip_dirs import SKIP_DIRS
+from .skip_exts import SKIP_EXTENSIONS
+from .target_exts import TARGET_EXTENSIONS
 
 
 def is_embeddable_file(file_path: Path) -> bool:
