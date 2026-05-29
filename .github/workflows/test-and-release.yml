@@ -36,6 +36,8 @@ jobs:
 
       - name: Bump version and push release tag
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
@@ -53,3 +55,6 @@ jobs:
           
           # Push the commit and the tags back to master
           git push origin HEAD:master --follow-tags
+          
+          # Create GitHub Release pointing to the new tag
+          gh release create "v$NEW_VERSION" --title "Release v$NEW_VERSION" --notes "Automated release for version v$NEW_VERSION"
