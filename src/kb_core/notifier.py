@@ -40,13 +40,13 @@ class Gotify:
             print("Gotify token or URL not configured. Skipping notification.")
 
     def fetch_notifications(self):
-        if not self.POST_ENABLED:
+        if not self.FETCH_ENABLED:
             print("Gotify fetching is not enabled. Skipping fetch.")
             return []
-        if self._gotify_token and self._gotify_url:
+        if self._client_token and self._gotify_url:
             try:
                 response = httpx.get(
-                    f"{self._gotify_url}/message?token={self._gotify_token}"
+                    f"{self._gotify_url}/message?token={self._client_token}"
                 )
                 response.raise_for_status()
                 return response.json().get("messages", [])
@@ -54,5 +54,5 @@ class Gotify:
                 print(f"Error fetching Gotify notifications: {e}")
                 return []
         else:
-            print("Gotify token or URL not configured. Skipping fetch.")
+            print("Gotify client token or URL not configured. Skipping fetch.")
             return []
