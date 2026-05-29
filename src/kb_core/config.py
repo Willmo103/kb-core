@@ -3,7 +3,7 @@ import sqlite_utils
 
 
 class Config:
-    root: Path = Path(__file__).parent.parent.parent.parent.parent
+    root: Path = Path().home() / ".kb"
     configs_dir: Path = root / "configs"
     db_path: Path = root / "kb.db"
 
