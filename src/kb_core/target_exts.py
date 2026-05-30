@@ -1,3 +1,7 @@
+"""
+Target extensions for file embedding
+"""
+
 TARGET_EXTENSIONS = [
     # Code
     ".py",

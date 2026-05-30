@@ -1,3 +1,7 @@
+"""
+Skips these directories when scanning for files.
+"""
+
 SKIP_DIRS = {
     "build",
     "builds",
@@ -79,16 +83,11 @@ SKIP_DIRS = {
     ".zsh_history",
     ".zshrc",
     "bower_components",
-    ".vscode",
     ".venv",
     "venv",
     "env",
     "site-packages",
-    "dist",
-    "build",
     "pip-wheel-metadata",
-    ".egg-info",
-    ".eggs",
     ".log",
     ".tmp",
     "3D Objects",

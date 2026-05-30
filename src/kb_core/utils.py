@@ -15,11 +15,26 @@ from .target_exts import TARGET_EXTENSIONS
 
 
 def is_embeddable_file(file_path: Path) -> bool:
-    """Check if the file has an embeddable extension."""
+    """Check if the file has an embeddable extension.
+
+    Args:
+        file_path (Path): Path to the file.
+
+    Returns:
+        bool: True if the file has an embeddable extension.
+    """
     return file_path.suffix in TARGET_EXTENSIONS
 
 
 def human_size(bytes_: int) -> str:
+    """Convert a size in bytes to a human-readable format.
+
+    Args:
+        bytes_ (int): Size in bytes.
+
+    Returns:
+        str: Human-readable size.
+    """
     if bytes_ < 1024:
         return f"{bytes_} B"
     for unit in ["KB", "MB", "GB", "TB"]:
@@ -48,6 +63,7 @@ def get_uuid() -> str:
 
 
 def generate_image_hash(file_path: Path) -> str:
+    """Generate a hash of the image for deduplication."""
     sha256 = hashlib.sha256()
     with open(file_path, "rb") as f:
         while chunk := f.read(65536):

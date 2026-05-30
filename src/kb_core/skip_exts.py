@@ -1,3 +1,7 @@
+"""
+Skips these extensions when scanning for files.
+"""
+
 SKIP_EXTENSIONS = [
     ".pdb",
     ".pyc",
