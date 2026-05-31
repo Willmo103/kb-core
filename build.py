@@ -2,6 +2,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+
 def run_step(cmd: list[str], description: str):
     print(f"\n=========================================")
     print(f"Step: {description}")
@@ -15,12 +16,15 @@ def run_step(cmd: list[str], description: str):
         print(f"Command returned non-zero exit code: {e.returncode}")
         sys.exit(e.returncode)
     except FileNotFoundError:
-        print(f"\n[ERROR] Command not found. Make sure {' '.join(cmd)} is available in path.")
+        print(
+            f"\n[ERROR] Command not found. Make sure {' '.join(cmd)} is available in path."
+        )
         sys.exit(1)
+
 
 def main():
     project_dir = Path(__file__).resolve().parent
-    
+
     # 1. Sync project environment
     run_step(["uv", "sync"], "Synchronizing environment & dependencies")
 
@@ -31,6 +35,7 @@ def main():
     run_step(["uv", "build"], "Building source and wheel packages")
 
     print("\n[SUCCESS] Build pipeline completed successfully!")
+
 
 if __name__ == "__main__":
     main()
