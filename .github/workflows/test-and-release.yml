@@ -57,7 +57,8 @@ jobs:
           
           # Push the commit and the tags back to the active branch
           BRANCH_NAME=${GITHUB_REF#refs/heads/}
-          git push origin HEAD:$BRANCH_NAME --follow-tags
+          git push origin HEAD:$BRANCH_NAME
+          git push origin "v$NEW_VERSION"
 
       - name: Build Python CLI Wheel/sdist
         shell: bash
