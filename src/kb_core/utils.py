@@ -187,3 +187,102 @@ def extract_exif(img: Image.Image) -> dict:
         print(f"EXIF Extraction error: {e}")
 
     return exif_data
+
+
+def download_github_release_asset(
+    repo: str,
+    asset_pattern: str,
+    dest_path: Path,
+    token: Optional[str] = None,
+) -> bool:
+    """
+    Downloads the latest release asset from a GitHub repository matching the asset_pattern.
+
+    Args:
+        repo: GitHub repository in format 'owner/repo' (e.g. 'Willmo103/kb-clipboard')
+        asset_pattern: regex pattern to match the asset filename (e.g. r'kb-clipboard.*\\.exe')
+        dest_path: destination Path to save the downloaded file
+        token: optional GitHub personal access token for private repositories
+    """
+    import json
+    import os
+    import re
+    import urllib.request
+
+    url = f"https://api.github.com/repos/{repo}/releases/latest"
+    req = urllib.request.Request(url)
+    req.add_header("User-Agent", "kb-updater")
+    req.add_header("Accept", "application/vnd.github.v3+json")
+
+    # Use token if available
+    auth_token = token or os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    if auth_token:
+        req.add_header("Authorization", f"token {auth_token}")
+
+    try:
+        with urllib.request.urlopen(req) as response:
+            data = json.loads(response.read().decode())
+
+        assets = data.get("assets", [])
+        for asset in assets:
+            name = asset.get("name", "")
+            if re.search(asset_pattern, name, re.IGNORECASE):
+                download_url = asset.get("browser_download_url")
+                print(f"Downloading {name} from {download_url}...")
+
+                # Make download request
+                down_req = urllib.request.Request(download_url)
+                down_req.add_header("User-Agent", "kb-updater")
+                if auth_token:
+                    down_req.add_header("Authorization", f"token {auth_token}")
+
+                dest_path.parent.mkdir(parents=True, exist_ok=True)
+                with urllib.request.urlopen(down_req) as down_resp, open(
+                    dest_path, "wb"
+                ) as out_file:
+                    out_file.write(down_resp.read())
+                print(f"Successfully downloaded to {dest_path}")
+                return True
+
+        print(
+            f"No asset matching pattern '{asset_pattern}' found in latest release."
+        )
+        return False
+    except Exception as e:
+        print(f"Error downloading release asset: {e}")
+        return False
+
+
+def check_github_latest_release(
+    repo: str, token: Optional[str] = None
+) -> Optional[dict]:
+    """
+    Queries the latest release metadata for a GitHub repository.
+
+    Args:
+        repo: GitHub repository in format 'owner/repo' (e.g. 'Willmo103/kb-clipboard')
+        token: optional GitHub personal access token
+
+    Returns:
+        dict containing release metadata if successful, else None
+    """
+    import json
+    import os
+    import urllib.request
+
+    url = f"https://api.github.com/repos/{repo}/releases/latest"
+    req = urllib.request.Request(url)
+    req.add_header("User-Agent", "kb-updater")
+    req.add_header("Accept", "application/vnd.github.v3+json")
+
+    # Use token if available
+    auth_token = token or os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    if auth_token:
+        req.add_header("Authorization", f"token {auth_token}")
+
+    try:
+        with urllib.request.urlopen(req) as response:
+            return json.loads(response.read().decode())
+    except Exception as e:
+        print(f"Error checking latest release: {e}")
+        return None
